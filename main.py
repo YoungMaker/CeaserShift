@@ -58,16 +58,7 @@ if __name__ == '__main__':
     # plaintext = plaintext_file.readline() #read in plaintext
     # secret = shift_by(random.randint(0,26), plaintext) #encrypts with random key 0,26
 
-    scores = [0] * 26
-    for z in range(0,26): #try them all for frequency analysis.
-        secret_try = shift_by(z, secret) #try a shift
-        scores[z] =  str(distance_score(prob_count(frequency_count(secret_try), len(secret_try)))) #caclulate its score and save it
-
-    print "" + str(min(scores)) + ", " +str(scores.index(min(scores)))
-
-    print shift_by(scores.index(min(scores)), secret)
-
-    file_out.write( "?,"+ secret + "\n") #writes out secret message
+    file_out.write("?,"+ secret + "\n") #writes out secret message
     file_out.write("Brute Force,\n")
 
     file_out.write("key, shifted text\n")
@@ -75,8 +66,17 @@ if __name__ == '__main__':
         file_out.write( str(x) + "," + shift_by(x, secret) + "\n")
 
     file_out.write("Frequency analysis,\n")
-    file_out.write("Min total frequency distance, key\n")
-    file_out.write("" + str(min(scores)) + ", " +str(scores.index(min(scores))) + "\n,")
+    file_out.write("frequency distance, key\n")
+    scores = [0] * 26
+    for z in range(0,26): #try them all for frequency analysis.
+        secret_try = shift_by(z, secret) #try a shift
+        scores[z] =  distance_score(prob_count(frequency_count(secret_try), len(secret_try))) #caclulate its score and save it
+        file_out.write(str(distance_score(prob_count(frequency_count(secret_try), len(secret_try)))) + "," + str(z) + "\n")
+
+    print "" + str(min(scores)) + ", " +str(scores.index(min(scores)))
+    print shift_by(scores.index(min(scores)), secret)
+
+    file_out.write(str(min(scores)) + ", " +str(scores.index(min(scores))) + "\n,")
     file_out.write(shift_by(scores.index(min(scores)), secret))
     file_out.write("\n")
 
